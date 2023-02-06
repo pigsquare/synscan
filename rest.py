@@ -18,3 +18,4 @@ def scan(ip,port):
 
 if __name__ == '__main__':
     scan('39.156.66.10', 80)
+    # https://www.codenong.com/cs105593329/
