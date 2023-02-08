@@ -13,7 +13,7 @@ def scan(ip:str,port:int,timeout=1.0)->str:
             # print(ip, "TCP" , port, "open")
             return "open"
             # 注意这里如果使用+号进行字符串拼接的话会导致报错，使用逗号即可拼接
-        elif int(result[TCP].flags)==20:
+        elif str(result[TCP].flags).find("R")!=-1:
             # print('closed'+str(result[TCP].flags))
             return 'closed'
         else:
@@ -25,7 +25,7 @@ def scan(ip:str,port:int,timeout=1.0)->str:
 
 if __name__ == '__main__':
     scan('39.156.66.10', 80)
-    scan("baidu.com", 80)
-    for i in range(1024):
-        scan('baidu.com', i, 0.5)
-    # https://www.codenong.com/cs105593329/
+    scan("baidu.com", 443)
+    for i in (21,25,80,443,8080,8888,53):
+        print(scan('sq.sjnb.club', i, 0.5))
+    # https://www.codenong.com/cs105593329/gvh12hhju9
