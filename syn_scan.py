@@ -10,7 +10,7 @@ def scan(ip:str,port:int,timeout=1.0)->str:
         # ls(packet)
         # ls(result)
         if int(result[TCP].flags) == 18:
-            # 通过判断响应的数据包中，是否存在第二次握手Ack+syn标志位（对应int为20），存在即端口开放
+            # 通过判断响应的数据包中，是否存在第二次握手Ack+syn标志位（对应int为18），存在即端口开放
             # print(ip, "TCP" , port, "open")
             return "open"
             # 注意这里如果使用+号进行字符串拼接的话会导致报错，使用逗号即可拼接
