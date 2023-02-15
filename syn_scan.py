@@ -1,6 +1,10 @@
 from scapy.all import *
 from threading import Thread
 from tqdm import tqdm
+from optparse import OptionParser
+import itertools
+import json
+from utils import *
 
 
 scan_res = []
@@ -48,21 +52,44 @@ def add_res(ip: str, port: int, timeout=1.0, retries=1) -> None:
         open_ports.append(result)
 
 
-if __name__ == '__main__':
-    # scan('39.156.66.10', 80)
-    # scan("baidu.com", 443)
-    s_t = time.time()
-    for i in tqdm(range(10000)):
-        t = Thread(target=add_res, args=('192.168.0.88', i, 2, 5))
+def main():
+    parser = OptionParser("Usage program -i <target host> -p <target port> -t <time out> -r <retry times>")
+    parser.add_option("-i", '--host', type="string",dest="optIP",help="specify target host or website, can include hyphen and comma, or a file path")
+    parser.add_option("-p","--port", type="string",dest="optPorts",help="specify target port separated by comma, can include hyphen, or a file path")
+    parser.add_option("-t","--timeout", type="float",dest="optTimeout",help="specify time out in seconds", default=0.50)
+    parser.add_option("-r","--retry", type="int",dest="optRetry",help="specify retry times", default=1)
+    parser.add_option("-o","--output", type="string",dest="optOutput",help="specify the dir to save results", default='./')
+    options,args = parser.parse_args()
+    # print(options)
+    if options.optIP is None or options.optPorts is None:
+        print(parser.usage)
+        exit(0)
+    if os.path.exists(options.optIP):
+        with open(options.optIP, 'r') as file:
+            ips=parse_ip_range(file.read())
+    else:
+        ips=parse_ip_range(options.optIP)
+    if os.path.exists(options.optPorts):
+        with open(options.optPorts, 'r') as file:
+            ports=parse_port_range(file.read())
+    else:
+        ports=parse_port_range(options.optPorts)
+
+    timeout=options.optTimeout
+    retry=options.optRetry
+    directory = options.optOutput
+    for ip, port in tqdm(itertools.product(ips,ports),total=len(ips)*len(ports)):
+        t = Thread(target=add_res, args=(ip,port, timeout, retry))
         threads.append(t)
         t.start()
-
-    for thread in tqdm(threads):
+    for thread in threads:
         thread.join()
     scan_res.sort(key=lambda x: (x['ip'], x['port']))
     open_ports.sort(key=lambda x: (x['ip'], x['port']))
-    for r in open_ports:
-        print(r)
-    e_t = time.time()
-    print(e_t-s_t)
-    # https://www.codenong.com/cs105593329/gvh12hhju9
+    with open(os.path.join(directory, "all_results.json"), 'w')as f:
+        json.dump(scan_res,f,indent=2)
+    with open(os.path.join(directory, "open_results.json"), 'w')as f:
+        json.dump(open_ports,f,indent=2)
+
+if __name__ == '__main__':
+    main()
