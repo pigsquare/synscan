@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Port Scanning Tool</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #f0f0f0;
+		}
+
+		.container {
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+			background-color: #fff;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+		}
+
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+
+		input[type="text"],
+		textarea {
+			display: block;
+			margin-bottom: 10px;
+			padding: 5px;
+			width: 100%;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			box-sizing: border-box;
+		}
+
+		input[type="number"],
+		input[type="checkbox"] {
+			margin-bottom: 15px;
+		}
+
+		.btn {
+			padding: 10px;
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 16px;
+			font-weight: bold;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			transition: background-color 0.3s ease;
+		}
+
+		.btn:hover {
+			background-color: #3e8e41;
+		}
+
+		.result {
+			height: 10rem;
+			width: 30rem;
+			margin-top: 1rem;
+			padding: 0.5rem;
+			border: 1px solid #ddd;
+			overflow: auto;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h1>Port Scanning Tool</h1>
+		<form id="port-scanner-form">
+			<label for="ip_list">IP List:</label>
+			<textarea id="ip_list" name="ip_list" rows="5"></textarea>
+
+			<label for="port_list">Port List:</label>
+			<textarea id="port_list" name="port_list" rows="5"></textarea>
+
+			<label for="retry_times">Try Times:</label>
+			<input type="number" id="retry_times" name="retry_times" min="1" value="1">
+
+			<label for="timeout_value">Timeout Value:</label>
+			<input type="number" id="timeout_value" name="timeout_value" min="0.1" step="0.1" value="1.0">
+
+			<label for="show_closed_ports">Show Closed Ports:<input type="checkbox" id="show_closed_ports"
+					name="show_closed_ports"></label>
+
+			<input type="submit" id="scan_btn" class="btn" value="Scan"></input>
+		</form>
+
+		<div class="result" id="results"></div>
+	</div>
+
+</body>
+<script type="text/javascript" src="https://cdn.socket.io/3.1.2/socket.io.js"></script>
+
+<script>
+	const form = document.getElementById('port-scanner-form');
+	form.addEventListener('submit', function (event) {
+		event.preventDefault();
+		const ipList = document.getElementById('ip_list').value.trim();
+		const portList = document.getElementById('port_list').value.trim();
+		const retry = document.getElementById('retry_times').value;
+		const timeout = document.getElementById('timeout_value').value;
+		const showClosedPorts = document.getElementById('show_closed_ports').checked;
+		const results = document.getElementById('results');
+		console.log(ipList, portList, retry, timeout, showClosedPorts)
+
+		// perform port scanning and display results in the "results" div
+		// ...
+
+		// example result message
+		const message = `Scanning ports ${portList} on IP(s) ${ipList}...`;
+		results.textContent = message;
+		namespace = '/dcenter';
+		var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+		console.log(socket)
+		socket.on('scan_response', function (msg) {
+			console.log(msg);
+		});
+		socket.on('dcenter', function (res) {
+			var t = res.data;
+			console.log(t)
+
+		});
+		socket.emit('scan_event', {
+			ipList: ipList,
+			portList: portList,
+			retry: retry,
+			timeout: timeout,
+			showClosedPorts:showClosedPorts
+		});
+	});
+
+</script>
+
+</html>
