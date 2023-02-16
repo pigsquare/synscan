@@ -111,9 +111,7 @@
 		console.log(ipList, portList, retry, timeout, showClosedPorts)
 
 		// perform port scanning and display results in the "results" div
-		// ...
 
-		// example result message
 		const message = `Scanning start...`;
 		results.textContent = message;
 		namespace = '/dcenter';
@@ -123,12 +121,6 @@
 			console.log(msg);
 			results.innerHTML = results.innerHTML + '<br/>' + msg.data;
 			if (msg.data === 'Scan finished.') { socket.close() }
-		});
-		socket.on('dcenter', function (res) {
-			var t = res.data;
-			results.innerHTML = results.innerHTML + '<br/>' + t.data
-			console.log(t)
-
 		});
 		socket.emit('scan_event', {
 			ipList: ipList,
