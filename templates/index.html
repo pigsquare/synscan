@@ -121,7 +121,8 @@
 		console.log(socket)
 		socket.on('scan_response', function (msg) {
 			console.log(msg);
-			results.innerHTML = results.innerHTML+'<br/>'+msg.data
+			results.innerHTML = results.innerHTML+'<br/>'+msg.data;
+			if (msg.data === 'Scan finished.'){socket.close()}
 		});
 		socket.on('dcenter', function (res) {
 			var t = res.data;
