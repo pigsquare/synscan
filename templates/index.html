@@ -61,7 +61,7 @@
 
 		.result {
 			height: 10rem;
-			width: 30rem;
+			width: 100%;
 			margin-top: 1rem;
 			padding: 0.5rem;
 			border: 1px solid #ddd;
@@ -114,16 +114,18 @@
 		// ...
 
 		// example result message
-		const message = `Scanning ports ${portList} on IP(s) ${ipList}...`;
+		const message = `Scanning start...`;
 		results.textContent = message;
 		namespace = '/dcenter';
 		var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
 		console.log(socket)
 		socket.on('scan_response', function (msg) {
 			console.log(msg);
+			results.innerHTML = results.innerHTML+'<br/>'+msg.data
 		});
 		socket.on('dcenter', function (res) {
 			var t = res.data;
+			results.innerHTML = results.innerHTML+'<br/>'+t.data
 			console.log(t)
 
 		});
