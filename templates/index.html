@@ -99,7 +99,7 @@
 <script type="text/javascript" src="https://cdn.socket.io/3.1.2/socket.io.js"></script>
 
 <script>
-	const form = document.getElementById('port-scanner-form');
+	const form = document.getElementById('port_scanner_form');
 	form.addEventListener('submit', function (event) {
 		event.preventDefault();
 		const ipList = document.getElementById('ip_list').value.trim();
@@ -121,12 +121,12 @@
 		console.log(socket)
 		socket.on('scan_response', function (msg) {
 			console.log(msg);
-			results.innerHTML = results.innerHTML+'<br/>'+msg.data;
-			if (msg.data === 'Scan finished.'){socket.close()}
+			results.innerHTML = results.innerHTML + '<br/>' + msg.data;
+			if (msg.data === 'Scan finished.') { socket.close() }
 		});
 		socket.on('dcenter', function (res) {
 			var t = res.data;
-			results.innerHTML = results.innerHTML+'<br/>'+t.data
+			results.innerHTML = results.innerHTML + '<br/>' + t.data
 			console.log(t)
 
 		});
@@ -135,7 +135,7 @@
 			portList: portList,
 			retry: retry,
 			timeout: timeout,
-			showClosedPorts:showClosedPorts
+			showClosedPorts: showClosedPorts
 		});
 	});
 
