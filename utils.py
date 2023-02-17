@@ -8,7 +8,7 @@ def parse_ip_range(ip_range):
     ips = []
 
     # Split the string into IP ranges
-    ip_ranges = ip_range.replace(' ', '').replace('\n', ',').split(',')
+    ip_ranges = ip_range.replace(' ', '').replace('\n', ',').replace('，', ',').split(',')
 
     # Loop over the IP ranges
     for ip_range in ip_ranges:
@@ -37,7 +37,7 @@ def parse_ip_range(ip_range):
 def parse_port_range(port_range):
     """Parses a string of ports separated by commas and/or hyphens and returns a list of individual ports"""
     ports = []
-    port_ranges = port_range.replace(' ', '').replace('\n', ',').split(',')
+    port_ranges = port_range.replace(' ', '').replace('\n', ',').replace('，', ',').split(',')
 
     for port_range in port_ranges:
         if not port_range:
