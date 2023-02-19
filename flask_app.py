@@ -57,11 +57,11 @@ def mtest_message(message):
     tasks = tqdm(itertools.product(ips, ports), total=len(ips)*len(ports))
     for ip, port in tasks:
         res = scan(ip, port, float(message['timeout']), int(message['retry']))
-        broadcasted_data = {'data': f"{ip}:{port} {res}"}
+        res_data = {'data': f"{ip}:{port} {res}"}
         if res == 'open':
-            emit('scan_response', broadcasted_data)
+            emit('scan_response', res_data)
         elif message['showClosedPorts']:
-            emit('scan_response', broadcasted_data)
+            emit('scan_response', res_data)
     emit('scan_response',
          {'data': "Scan finished."})
 

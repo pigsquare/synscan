@@ -54,7 +54,7 @@ def add_res(ip: str, port: int, timeout=1.0, retries=1) -> None:
 
 def main():
     parser = OptionParser(
-        "Usage program -i <target host> -p <target port> -t <time out> -r <retry times>")
+        "Usage program -i <target host> -p <target port> [-o <output dir>] [-t <time out>] [-r <retry times>]")
     parser.add_option("-i", "--host", type="string", dest="optIP",
                       help="specify target host or website, can include hyphen and comma, or a file path")
     parser.add_option("-p", "--port", type="string", dest="optPorts",
