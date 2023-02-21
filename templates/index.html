@@ -120,6 +120,7 @@
 		socket.on('scan_response', function (msg) {
 			console.log(msg);
 			results.innerHTML = results.innerHTML + '<br/>' + msg.data;
+			results.scrollTop = results.scrollHeight;
 			if (msg.data === 'Scan finished.') { socket.close() }
 		});
 		socket.emit('scan_event', {
